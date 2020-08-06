@@ -1,0 +1,14 @@
+{% extends 'ideas/base.html'%}
+
+{% block body_block %}
+  {% if registered %}
+    <h1>Thank you for registering and welcome to the innovators group.</h1>
+    {% else %}
+    <h1>Please register here!</h1>
+    <form enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      {{user_form.as_p}}
+      <input type="submit" value="Sign Up">
+    </form>
+  {% endif %}
+{% endblock %}
