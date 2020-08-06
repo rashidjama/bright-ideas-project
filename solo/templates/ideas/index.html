@@ -2,9 +2,4 @@
 {% load staticfiles %}
 
 {% block body_block %}
-  {% for post in posts %}
-    <h1 class="post_title">{{post.title}}</h1>
-    <p>{{post.content}}</p>
-    <p>Posted by {{post.author}}</p>
-  {% endfor %}
 {% endblock %}

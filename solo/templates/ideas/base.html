@@ -24,6 +24,7 @@
         </ul>
 
         <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
           <li class="nav-item dropdown mr-3">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
               <i class="fas fa-user"></i> Welcome Rashid
@@ -37,6 +38,10 @@
               </a>
             </div>
           </li>
+          {% endif %}
+
+
+
           {% if user.is_authenticated %}
           <li class="nav-item">
             <a href="{% url 'user_logout'%}" class="nav-link">
@@ -46,7 +51,7 @@
           {% else %}
           <li class="nav-item">
             <a href="{% url 'ideas:user_login'%}" class="nav-link">
-              <i class="fas fa-user-times"></i> Login
+              <i class="fas fa-user"></i> Login
             </a>
           </li>
           {% endif %}
