@@ -1,5 +1,151 @@
 {% extends 'ideas/base.html' %}
-{% load staticfiles %}
-
+{% load tz %}
 {% block body_block %}
+
+<section id="posts">
+
+  <!-- Modal -->
+
+  <div class="container mt-4 mb-5">
+
+    <div class="row">
+      <div class="col-md-9">
+        {% for post in posts %}
+        <div class="card mb-2">
+          <div class="card-body">
+            <h4>{{post.title}}</h4>
+            <p class="lead">{{post.content | safe}}</p>
+            <p class="figure-caption">Posted by: <a
+                href="{% url 'ideas:member_details' post.author.id %}">{{post.author.username}}</a> On:
+              {{post.created_at | date }}</p>
+
+            <div class="people_like mt-2 mb-4 d-flex justify-content-between">
+              <span class="text-muted"> <i class="far fa-thumbs-up"></i>
+                <a href="{% url 'ideas:likers' post.id %}" class="likers">
+                  {{post.who_likes.count}} users(s)</a> like this idea!</span>
+              <div><a data-toggle="collapse" href="#collapse{{post.id}}" role="button" aria-expanded="false"
+                  aria-controls="collapseComments">{{post.post_comment.count}} Comments</a></div>
+            </div>
+
+            <!-- comment form accordian -->
+            <div class="collapse container" id="collapseComments{{post.id}}">
+              <form action="{% url 'ideas:add_comment' post.id %}" post_id='{{post.id}}' method="post"
+                class="form-group" id="comment">
+                {% csrf_token%}
+                <input type="text" name="comment" class="form-control rounded-pill border border-dark"
+                  placeholder="Write a comment...">
+              </form>
+            </div>
+
+            <!-- comments content -->
+
+            {% for comment in post.post_comment.all %}
+            <div class="my-2 bg-light collapse p-2 font-italic border rounded-sm comments" id="collapse{{post.id}}">
+              <a href="{% url 'ideas:member_details' comment.user.id %}">
+                {% if comment.user.userprofileinfo.profile_pic %}
+                <img src="{{ comment.user.userprofileinfo.profile_pic.url}}" alt="profile picture"
+                  class="img-fluid rounded-circle" width="50">
+                {% else %}
+                <img src="/media/default.jpg" alt="avator profile" class=" img-fluid rounded-circle" width="50">
+                {% endif %}
+              </a>
+              {% if comment.user.id == request.user.id %}
+              <span class="ml-2 mt-auto bg-light">{{comment.comment_content}} <a
+                  href="{% url 'ideas:delete_comment' comment.id %}"><span class="figure-caption text-danger">Delete!</span></a></span>
+              {% else %}
+              <span class="ml-2 mt-auto bg-light">{{comment.comment_content}}</span>
+              {% endif %}
+            </div>
+            {% endfor %}
+
+
+            <div class="like_comment mt-3 d-flex justify-content-around border">
+              <a href="{% url 'ideas:who_likes' post.id %}" class="btn text-dark"><i class="fas fa-thumbs-up fa-1x"></i>
+                Like</a>
+              <!-- comment accordian btn -->
+              <a class="btn text-dark" data-toggle="collapse" href="#collapseComments{{post.id}}" role="button"
+                aria-expanded="false" aria-controls="collapseExample"><i class="far fa-comment-alt"></i> Comment</a>
+
+              <a class="btn text-dark" data-toggle="collapse" href="#collapseShare{{post.id}}" role="button"
+                aria-expanded="false" aria-controls="collapseShare"><i class="fas fa-share"></i> Share</a>
+
+            </div>
+
+            {% if request.user.id == post.author.id %}
+            <div class="action mt-3">
+
+              <!-- Delete Button trigger modal -->
+              <a href="{% url 'ideas:delete_post' post.id %}" class="btn btn-outline-danger btn-sm">Delete Post</a>
+
+
+              <!-- edit post -->
+              <a href="{% url 'ideas:edit_post' post.id %}" class="btn btn-outline-primary ml-2 btn-sm">Edit Post</a>
+            </div>
+            {% endif %}
+          </div>
+          <!-- share message -->
+          <div class="collapse container my-2" id="collapseShare{{post.id}}">
+            <div class="aler alert-info rounded p-3" role="alert">
+              This feature is Coming Soon!!
+            </div>
+          </div>
+
+        </div>
+        {% endfor %}
+        <!-- pagination -->
+        <nav aria-label="Page navigation">
+          <ul class="pagination mb-3">
+            {% if posts.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">
+                <<</a> </li> <li class="page-item"><a class="page-link" href="?page={{posts.previous_page_number}}">
+                    <</a> </li> {% endif %} {% for num in posts.paginator.page_range %} {% if posts.number == num %} <li
+                      class="page-item mx-1"><a class="page-link bg-dark text-white" href="{{posts.number}}">{{num}}</a>
+            </li>
+            {% else %}
+            <li class="page-item mx-1"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+            {%endif%}
+            {% endfor %}
+            {% if posts.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{posts.next_page_number}}">></a></li>
+            <li class="page-item"><a class="page-link" href="?page={{posts.paginator.num_pages}}">>></a></li>
+            {% endif %}
+          </ul>
+        </nav>
+
+      </div>
+
+      <div class="col-md-3">
+        <div class="card text-center bg-dark text-white mb-3">
+          <div class="card-body">
+            <h3>Share Your Ideas!</h3>
+            <h4 class="display-4">
+              <i class="fas fa-bullhorn"></i>
+            </h4>
+            <a href="{% url 'ideas:post'%}" class="btn btn-outline-light btn-sm">Post An Idea!</a>
+          </div>
+        </div>
+
+        <div class="card text-center bg-primary text-white mb-3">
+          <div class="card-body">
+            <h3><span>{{users.count}}</span> Members!</h3>
+            <h4 class="display-4">
+              <i class="fas fa-users"></i>
+            </h4>
+            <a href="{% url 'ideas:register'%}" class="btn btn-outline-light btn-sm">Join The Ninjas!</a>
+          </div>
+        </div>
+
+        <div class="card text-center bg-dark text-white mb-3">
+          <div class="card-body">
+            <h3>All Shared Ideas.</h3>
+            <h4 class="display-4">
+              <i class="far fa-lightbulb"></i>
+            </h4>
+            <h3> {{all_posts.count}} Creative Ideas!</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}

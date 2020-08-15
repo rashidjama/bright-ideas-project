@@ -1,0 +1,33 @@
+{% extends 'ideas/base.html' %}
+{% block body_block %}
+  <div class="container mt-5">
+    <div class="jumbotron">
+      <div class="row">
+        <div class="col-md-3">
+          <h3 class="mb-3">Your profile pic</h3>
+          {% if one_user.userprofileinfo.profile_pic %}
+          <img src="{{ one_user.userprofileinfo.profile_pic.url}}" alt="" class="d-block img-fluid mb-3">
+          {% else %}
+          <img src="/media/default.jpg" alt="" class="d-block img-fluid mb-3">
+          {% endif %}
+        </div>
+        <div class="col-md-9">
+      <h3 class="mb-3">Member details</h3>
+      <ul class="list-group">
+      <li class="list-group-item"> Username: {{one_user}}</li>
+      <li class="list-group-item"> Email: {{one_user.email}}</li>
+      {% if one_user.userprofileinfo.portfolio_site%}
+      <li class="list-group-item">Portfolio site: <a href="{{one_user.userprofileinfo.portfolio_site}}">{{one_user.userprofileinfo.portfolio_site}}</a></li>
+      {% else %}
+      <li class="list-group-item">Email me at: <a href="mailto:{{user.email}}">{{one_user.email}}</a></li>
+      {% endif%}
+      <li class="list-group-item"> Total number of posts: {{one_user.posts.count}}</li>
+      <li class="list-group-item"> Total number of likes: {{one_user.liked_posts.count}}</li>
+      </ul>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+{% endblock %}

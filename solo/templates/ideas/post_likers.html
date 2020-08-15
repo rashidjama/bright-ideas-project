@@ -1,0 +1,32 @@
+{% extends 'ideas/base.html' %}
+{% block body_block %}
+
+
+<div class="half_width">
+  <div class="container mt-3">
+    <div class="jumbotron">
+      <u>
+        <h3 class="mb-5 font-italic">Users who like this idea!</h3>
+      </u>
+      <ul class="list-group">
+        {% for user in liked_post.who_likes.all %}
+
+        {% if user.userprofileinfo.profile_pic %}
+        <li class="d-flex list-group-item">
+          <img src="{{ user.userprofileinfo.profile_pic.url}}" alt="" class="d-block img-fluid rounded-circle mr-3"
+            width="50"> <a href="{% url 'ideas:member_details' user.id%}"
+            class="align-self-center">{{user.username}}</a>
+        </li>
+        {% else %}
+        <li class="d-flex list-group-item">
+          <img src="/media/default.jpg" alt="" class="d-block img-fluid rounded-circle mr-3" width="50">
+          <a href="{% url 'ideas:member_details' user.id%}" class="align-self-center">{{user.username}}</a>
+        </li>
+        {% endif %}
+
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

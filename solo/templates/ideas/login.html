@@ -1,12 +1,20 @@
 {% extends 'ideas/base.html' %}
 
 {% block body_block %}
-<div class="jumbotron">
-  <form action="{% url 'ideas:user_login' %}" method="POST">
-    {% csrf_token %}
-    <input type="text" name="username" id="">
-    <input type="password" name="password" id="">
-    <input type="submit" value="Sig In">
-  </form>
+<div class="half_width">
+  <div class="container mt-5">
+    <div class="jumbotron">
+      <h3 class="text-center mb-3"><i class="fas fa-user-circle"></i> Login</h3>
+      <form action="{% url 'ideas:user_login' %}" method="POST" class="form-group">
+        {% csrf_token %}
+        <label for="user">Username</label>
+        <input type="text" name="username" id="user" class="form-control">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" class="form-control">
+        <input type="submit" value="Sig In" class="btn btn-outline-dark mt-3">
+      </form>
+      <p class="lead mt-5 mb-0">Don't have an account with us, <a href="{% url 'ideas:register'%}"><i class="fas fa-chevron-circle-right"></i> Register Here</a></p>
+    </div>
+  </div>
 </div>
 {% endblock %}

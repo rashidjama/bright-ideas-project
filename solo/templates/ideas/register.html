@@ -1,15 +1,22 @@
 {% extends 'ideas/base.html'%}
 
 {% block body_block %}
-  {% if registered %}
-    <h1>Thank you for registering and welcome to the innovators group.</h1>
-    {% else %}
-    <h1>Please register here!</h1>
-    <form enctype="multipart/form-data" method="POST">
-      {% csrf_token %}
-      {{user_form.as_p}}
-      {{frofile_form.as_p}}
-      <input type="submit" value="Sign Up">
-    </form>
-  {% endif %}
+<div class="half_width">
+  <div class="container mt-2">
+    <div class="jumbotron">
+      {% if registered %}
+      <h1>Thank you for registering and welcome to the innovators group.</h1>
+      {% else %}
+      <h3 class="mb-4 text-center"><i class="fas fa-user-plus"></i> Registeration</h3>
+      <form enctype="multipart/form-data" method="POST" class="form-group">
+        {% csrf_token %}
+        {{user_form.as_p}}
+        {{profile_form.as_p}}
+        <input type="submit" value="Register" class="btn btn-outline-dark">
+      </form>
+    {% endif %}
+    <p class="lead">Already registered <a href="{% url 'ideas:user_login'%}"><i class="fas fa-sign-in-alt"></i> Login</a></p>
+    </div>
+  </div>
+</div>
 {% endblock %}

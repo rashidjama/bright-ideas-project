@@ -1,0 +1,28 @@
+{% extends 'ideas/base.html'%}
+{% block body_block %}
+  <div class="container">
+    <h3 class="text-center my-3">These are all the ideas you posted here</h3>
+    {% for post in current_user_posts %}
+
+    <div class="card">
+      <div class="card-body mb-5">
+        <h3>{{post.title}}</h3>
+        <p class="lead">{{post.content | safe}}</p>
+        <p class="text_muted">Posted by: <a href="{% url 'ideas:member_details' post.author.id %}">{{post.author.username}}</a> on {{post.created_at}}</p>
+        {% if request.user.id == post.author.id %}
+        <div class="action mt-3">
+
+          <!-- Delete Button trigger modal -->
+          <a href="{% url 'ideas:delete_post' post.id %}" class="btn btn-outline-danger btn-sm" >Delete Post</a>
+
+
+          <!-- edit post -->
+          <a href="{% url 'ideas:edit_post' post.id %}" class="btn btn-outline-primary ml-2 btn-sm">Edit Post</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+{% endblock %}
