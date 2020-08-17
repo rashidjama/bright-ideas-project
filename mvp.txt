@@ -1,0 +1,15 @@
+project name: bright ideas
+
+project MVP
+	. Landing page that everyone can see posts(2hrs)
+	. Add pagination to the landing page(4hrs)
+	. Login/reg(4hrs) with styles
+	. Dashboard where only signed in members can go to 
+	  to post, edit, like and vote for an idea(5hrs)
+
+Project backlog products
+	.optional user profile picture upload(1hr)
+	.user portfolio site upload(1hr)
+	.user can delete his account anytime they want(5hrs)
+
+
